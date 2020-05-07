@@ -1,11 +1,15 @@
 <?php
 
 class Database {
+    private static $dbHost = $_ENV['HOST'];
+    private static $dbName = $_ENV ['DB_NAME'];
+    private static $dbUser = $_ENV['USER'];
+    private static $dbUserPassword = $_ENV['PASSWORD'];
     private static $connection = null;
     
     public static function connect() {     
         try {
-            self::$connection = new PDO("mysql:host=" . $_ENV['HOST'] . ";dbname=" .$_ENV ['DB_NAME'], $_ENV['USER'], $_ENV['PASSWORD'], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            self::$connection = new PDO("mysql:host=" . self::$dbHost . ";dbname=" . self::$dbName, self::$dbUser, self::$dbUserPassword);
         } catch (PDOException $exception) {
             die($exception->getMessage());
         }
