@@ -1,8 +1,6 @@
 <?php
     session_start();
 
-    require 'database.php';
-
     if (!empty($_GET['id'])) {
         $id = checkInput($_GET['id']);
     }
@@ -10,7 +8,20 @@
     if(!empty($_POST)) {
         $id = checkInput($_POST['id']);
 
-        $db = Database::connect();
+        // On se connecte à la BDD
+        $url = getenv('JAWSDB_URL');
+        $dbparts = parse_url($url);
+
+        $hostname = $dbparts['host'];
+        $username = $dbparts['user'];
+        $password = $dbparts['pass'];
+        $database = ltrim($dbparts['path'],'/');
+
+        try {
+            $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
+        } catch(PDOException $e) {
+            die();
+        }
 
         // On supprime l'image
         $statement = $db->prepare('SELECT image FROM items WHERE id = ?');
@@ -22,7 +33,8 @@
         $statement = $db->prepare("DELETE FROM items WHERE id = ?");
         $statement->execute(array($id));
 
-        Database::disconnect();
+        // On se déconnecte
+        $db = null;
 
         header("Location: index.php");
     }

@@ -1,8 +1,6 @@
 <?php
     session_start();
 
-    require 'database.php';
-
     if (!empty($_GET['id'])) {
         $id = checkInput($_GET['id']);
     }
@@ -72,7 +70,20 @@
         }
         // Si l'image n'a pas été modifiée ou si elle a été modifiée avec succès :
         if (($isSuccess && $isImageUpdated && $isUploadSuccess) || ($isSuccess && !$isImageUpdated)) {
-            $db = Database::connect();
+            // On se connecte à la BDD
+            $url = getenv('JAWSDB_URL');
+            $dbparts = parse_url($url);
+
+            $hostname = $dbparts['host'];
+            $username = $dbparts['user'];
+            $password = $dbparts['pass'];
+            $database = ltrim($dbparts['path'],'/');
+
+            try {
+                $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
+            } catch(PDOException $e) {
+                die();
+            }
 
             if ($isImageUpdated) {
                 $statement = $db->prepare("
@@ -92,13 +103,27 @@
                 $statement->execute(array($name, $description, $price, $category, $id));
             }
 
-            Database::disconnect();
+            // On se déconnecte
+            $db = null;
 
             header("Location: index.php");
 
         // Sinon si l'upload de l'image a échoué :
         } elseif ($isImageUpdated && !$isUploadSuccess) {
-            $db = Database::connect();
+            // On se connecte à la BDD
+            $url = getenv('JAWSDB_URL');
+            $dbparts = parse_url($url);
+
+            $hostname = $dbparts['host'];
+            $username = $dbparts['user'];
+            $password = $dbparts['pass'];
+            $database = ltrim($dbparts['path'],'/');
+
+            try {
+                $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
+            } catch(PDOException $e) {
+                die();
+            }
 
             $statement = $db->prepare("SELECT image FROM items WHERE id = ?");
 
@@ -107,11 +132,25 @@
             $item = $statement->fetch();
             $image = $item['image'];
 
-            Database::disconnect();
+            // On se déconnecte
+            $db = null;
         }
     // Si j'arrive pour la première fois sur la page de modifications (après avoir cliqué sur le bouton "modifier" depuis la liste des items) :
     } else {
-        $db = Database::connect();
+        // On se connecte à la BDD
+        $url = getenv('JAWSDB_URL');
+        $dbparts = parse_url($url);
+
+        $hostname = $dbparts['host'];
+        $username = $dbparts['user'];
+        $password = $dbparts['pass'];
+        $database = ltrim($dbparts['path'],'/');
+
+        try {
+            $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
+        } catch(PDOException $e) {
+            die();
+        }
 
         $statement = $db->prepare("SELECT * FROM items WHERE id = ?");
 
@@ -124,7 +163,8 @@
         $category = $item['category'];
         $image = $item['image'];
 
-        Database::disconnect();
+        // On se déconnecte
+        $db = null;
     }
 
     function checkInput($data) {
@@ -190,7 +230,21 @@
                             <label for="category"><strong>Catégorie :</strong></label>
                             <select class="form-control" name="category" id="category">
                                 <?php
-                                    $db = Database::connect();
+                                    // On se connecte à la BDD
+                                    $url = getenv('JAWSDB_URL');
+                                    $dbparts = parse_url($url);
+
+                                    $hostname = $dbparts['host'];
+                                    $username = $dbparts['user'];
+                                    $password = $dbparts['pass'];
+                                    $database = ltrim($dbparts['path'],'/');
+
+                                    try {
+                                        $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
+                                    } catch(PDOException $e) {
+                                        die();
+                                    }
+
                                     foreach ($db->query('SELECT * FROM categories') as $row) {
                                         if ($row['id'] == $category) {
                                             echo '<option selected="selected" value="' . $row['id'] . '">' . $row['name'] . '</option>';
@@ -198,7 +252,9 @@
                                             echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
                                         }
                                     }
-                                    Database::disconnect();
+                                    
+                                    // On se déconnecte
+                                    $db = null;
                                 ?>
                             </select>
                             <span class="help-inline">

@@ -18,9 +18,7 @@
         </h1>
 
         <?php
-            require 'admin/database.php';
-
-            // $db = Database::connect();
+            // On se connecte à la BDD
             $url = getenv('JAWSDB_URL');
             $dbparts = parse_url($url);
 
@@ -31,14 +29,9 @@
 
             try {
                 $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
-                // set the PDO error mode to exception
-                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                echo "Connected successfully";
-                }
-            catch(PDOException $e)
-                {
-                echo "Connection failed: " . $e->getMessage();
-                }
+            } catch(PDOException $e) {
+                die();
+            }
 
             $statement = $db->query("SELECT * FROM categories");
 
@@ -93,7 +86,8 @@
                     </div>';
             }
 
-            // Database::disconnect();
+            // On se déconnecte
+            $db = null;
 
             echo '</div>';
         ?>

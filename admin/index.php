@@ -52,9 +52,20 @@
 
                         <tbody>
                             <?php
-                                require 'database.php';
+                                // On se connecte à la BDD
+                                $url = getenv('JAWSDB_URL');
+                                $dbparts = parse_url($url);
 
-                                $db = Database::connect();
+                                $hostname = $dbparts['host'];
+                                $username = $dbparts['user'];
+                                $password = $dbparts['pass'];
+                                $database = ltrim($dbparts['path'],'/');
+
+                                try {
+                                    $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
+                                } catch(PDOException $e) {
+                                    die();
+                                }
                                 $statement = $db->query('
                                     SELECT items.id, items.name, items.description, items.price, categories.name AS category 
                                     FROM items LEFT JOIN categories

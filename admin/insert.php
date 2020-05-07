@@ -1,8 +1,6 @@
 <?php
     session_start();
 
-    require 'database.php';
-
     $name = $description = $price = $category = $image = "";
     $nameError = $descriptionError = $priceError = $categoryError = $imageError = "";
 
@@ -68,7 +66,20 @@
         }
 
         if ($isSuccess && $isUploadSuccess) {
-            $db = Database::connect();
+            // On se connecte à la BDD
+            $url = getenv('JAWSDB_URL');
+            $dbparts = parse_url($url);
+
+            $hostname = $dbparts['host'];
+            $username = $dbparts['user'];
+            $password = $dbparts['pass'];
+            $database = ltrim($dbparts['path'],'/');
+
+            try {
+                $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
+            } catch(PDOException $e) {
+                die();
+            }
 
             $statement = $db->prepare("
                 INSERT INTO items (name, description, price, category, image) VALUES (?, ?, ?, ?, ?)
@@ -76,7 +87,8 @@
 
             $statement->execute(array($name, $description, $price, $category, $image));
 
-            Database::disconnect();
+            // On se déconnecte
+            $db = null;
 
             header("Location: index.php");
         }
@@ -144,11 +156,25 @@
                         <label for="category"><strong>Catégorie :</strong></label>
                         <select class="form-control" name="category" id="category">
                             <?php
-                                $db = Database::connect();
+                                // On se connecte à la BDD
+                                $url = getenv('JAWSDB_URL');
+                                $dbparts = parse_url($url);
+
+                                $hostname = $dbparts['host'];
+                                $username = $dbparts['user'];
+                                $password = $dbparts['pass'];
+                                $database = ltrim($dbparts['path'],'/');
+
+                                try {
+                                    $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
+                                } catch(PDOException $e) {
+                                    die();
+                                }
                                 foreach ($db->query('SELECT * FROM categories') as $row) {
                                     echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
                                 }
-                                Database::disconnect();
+                                 // On se déconnecte
+                                $db = null;
                             ?>
                         </select>
                         <span class="help-inline">

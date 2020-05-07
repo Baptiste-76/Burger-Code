@@ -1,6 +1,5 @@
 <?php
     session_start();
-    require 'database.php';
 
     $mail = "";
     $password = null;
@@ -24,7 +23,20 @@
         }
 
         if ($isSuccess) {
-            $db = Database::connect();
+            // On se connecte à la BDD
+            $url = getenv('JAWSDB_URL');
+            $dbparts = parse_url($url);
+
+            $hostname = $dbparts['host'];
+            $username = $dbparts['user'];
+            $password = $dbparts['pass'];
+            $database = ltrim($dbparts['path'],'/');
+
+            try {
+                $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
+            } catch(PDOException $e) {
+                die();
+            }
 
             $statement = $db->prepare("
                 SELECT count(*) AS count FROM users WHERE email = ? AND password = ?
@@ -35,7 +47,8 @@
             $user = $statement->fetch();
             $count = $user['count'];
 
-            Database::disconnect();
+            // On se déconnecte
+            $db = null;
 
             if ($count != 0) {
                 $_SESSION['username'] = $mail;
