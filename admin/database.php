@@ -5,8 +5,7 @@ class Database {
     
     public static function connect() {     
         try {
-            // self::$connection = new PDO("mysql:host=" . $_ENV['HOST'] . ";port=3306;dbname=" .$_ENV ['DB_NAME'], $_ENV['USER'], $_ENV['PASSWORD']);
-            self::$connection = new PDO($_ENV['JAWSDB_URL']);
+            self::$connection = new PDO("mysql:host=" . $_ENV['HOST'] . ";dbname=" .$_ENV ['DB_NAME'], $_ENV['USER'], $_ENV['PASSWORD'], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         } catch (PDOException $exception) {
             die($exception->getMessage());
         }
