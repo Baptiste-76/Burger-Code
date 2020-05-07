@@ -20,7 +20,25 @@
         <?php
             require 'admin/database.php';
 
-            $db = Database::connect();
+            // $db = Database::connect();
+            $url = getenv('JAWSDB_URL');
+            $dbparts = parse_url($url);
+
+            $hostname = $dbparts['host'];
+            $username = $dbparts['user'];
+            $password = $dbparts['pass'];
+            $database = ltrim($dbparts['path'],'/');
+
+            try {
+                $db = new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
+                // set the PDO error mode to exception
+                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                echo "Connected successfully";
+                }
+            catch(PDOException $e)
+                {
+                echo "Connection failed: " . $e->getMessage();
+                }
 
             $statement = $db->query("SELECT * FROM categories");
 
@@ -75,7 +93,7 @@
                     </div>';
             }
 
-            Database::disconnect();
+            // Database::disconnect();
 
             echo '</div>';
         ?>
