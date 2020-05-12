@@ -4,9 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Open Graph -->
+    <meta name="description" content="Concept de menu réalisé en PHP & MySQL.">
+    <meta property="og:site_name" content="Burger Code">
+    <meta property="og:url" content="https://burger-code.herokuapp.com">
+    <meta property="og:title" content="Burger Code">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://burger-code.herokuapp.com/images/burgercode.jpg">
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1921" />
+    <meta property="og:image:height" content="1263" />
+    <meta property="og:description" content="Concept de menu réalisé en PHP & MySQL.">
+    <meta name="author" content="Baptiste Bidaux">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/dbc1e24743.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap" rel="stylesheet"> 
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="css/style.css">
 
     <title>Burger Code</title>
