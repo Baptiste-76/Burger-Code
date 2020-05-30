@@ -5,16 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Open Graph -->
-    <meta name="description" content="Concept de menu réalisé en PHP & MySQL.">
     <meta property="og:site_name" content="Burger Code">
     <meta property="og:url" content="https://burger-code.herokuapp.com">
-    <meta property="og:title" content="Burger Code">
+    <meta property="og:title" content="Burger Code" name="title">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://burger-code.herokuapp.com/images/burgercode.jpg">
+    <meta property="og:image" content="http://burger-code.herokuapp.com/images/burgercode.jpg" name="image">
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1921" />
     <meta property="og:image:height" content="1263" />
-    <meta property="og:description" content="Concept de menu réalisé en PHP & MySQL.">
+    <meta property="og:description" content="Concept de menu réalisé en PHP & MySQL." name="description">
     <meta name="author" content="Baptiste Bidaux">
 
     <!-- Bootstrap -->
